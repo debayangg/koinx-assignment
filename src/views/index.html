@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload to Express Server</title>
+</head>
+<body>
+    <h1>Upload File</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="file" id="fileInput" />
+        <button type="submit">Upload</button>
+    </form>
+    <p id="status"></p>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData();
+            const file = document.getElementById('fileInput').files[0];
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('/analyse-csv', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                document.getElementById('status').innerText = "Uploaded successfully ";
+            } catch (error) {
+                document.getElementById('status').innerText = 'Upload failed: ' + error.message;
+            }
+        });
+    </script>
+</body>
+</html>

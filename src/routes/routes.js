@@ -3,20 +3,30 @@ const fs = require('fs');
 const path = require('path');
 const csv = require('csv-parser');
 const { handleData, checkBalance } = require('../utils/utils');
+const multer = require('multer');
+const { Readable } = require('stream');
 
 const router = new express.Router();
+const upload = multer({ storage: multer.memoryStorage() });
 
-// Endpoint to analyze a locally stored CSV file
-router.get('/analyze-csv', (req, res) => {
+// Endpoint to serve the index.html file
+router.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/index.html'));
+});
+
+// Endpoint to upload a CSV file and analyze its contents
+router.post('/analyse-csv', upload.single('file'), async (req, res) => {
     try {
-        const filePath = path.resolve(__dirname, 'file.csv');
-
-        if (!fs.existsSync(filePath)) {
-            return res.status(404).json({ error: 'File not found' });
+        if (!req.file) {
+            return res.status(400).json({ message: 'No file uploaded' });
         }
+        if (req.file.mimetype !== 'text/csv') {
+            return res.status(400).json({ message: 'Invalid file type' });
+        }
+        const results = [];
+        const fileStream = Readable.from(req.file.buffer);
 
-        let results = [];
-        fs.createReadStream(filePath)
+        fileStream
             .pipe(csv())
             .on('data', (data) => {
                 handleData(data);
@@ -49,5 +59,7 @@ router.post('/get-balance', async (req, res) => {
         return res.status(500).json({ error: 'An error occurred', details: error.message });
     }
 });
+
+
 
 module.exports = router;
