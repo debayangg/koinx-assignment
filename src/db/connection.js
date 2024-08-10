@@ -3,7 +3,6 @@ require('dotenv').config();  // Load environment variables from .env file
 
 const { MONGO_USER, MONGO_PASS, MONGO_DBNAME, MONGO_CLUSTER } = process.env;
 
-console.log("hello",MONGO_USER, MONGO_PASS, MONGO_DBNAME, MONGO_CLUSTER);
 // Construct the MongoDB URI
 const mongoURI = `mongodb+srv://${MONGO_USER}:${MONGO_PASS}@${MONGO_CLUSTER}/${MONGO_DBNAME}?retryWrites=true&w=majority`;
 
