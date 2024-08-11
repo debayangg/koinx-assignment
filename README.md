@@ -77,8 +77,8 @@ curl -X POST http://localhost:3000/get-balance -H "Content-Type: application/jso
  
 1. **Clone the repository:**
    ```bash
-   git clone <repository-url>
-   cd <repository-directory>
+   git clone https://github.com/debayangg/koinx-assignment.git
+   cd koinx-assignment
    ```
  
 2. **Install dependencies:**
@@ -87,7 +87,7 @@ curl -X POST http://localhost:3000/get-balance -H "Content-Type: application/jso
    ```
  
 3. **Configure Environment Variables:**
-   Create a `.env` file in the root directory and add the necessary environment variables, including database connection details.
+   Create a `.env` file in the root directory and add the necessary environment variables, including database connection details or change mongodbURI in `src/db/connection.js` to your local mongo server.
  
 4. **Start the server:**
    ```bash
